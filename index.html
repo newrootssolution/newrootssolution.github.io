@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>New Roots Solution — Fleet Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+  :root{
+    --nr-dark:#3D2B1F;--nr-brown:#6B4C38;--nr-teal:#2D7A6B;--nr-teal-mid:#3D9E8C;
+    --nr-teal-light:#E0F2EE;--nr-teal-pale:#F0FAF8;--nr-linen:#F0EDE6;
+    --nr-linen-mid:#E2DDD5;--nr-text:#1A1A1A;--nr-muted:#6B7280;
+    --radius:10px;--radius-sm:6px;--radius-full:999px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--nr-text);background:#fff;line-height:1.5}
+  body.sc{font-family:'Noto Sans SC',sans-serif}
+  body.tc{font-family:'Noto Sans TC',sans-serif}
+  a{text-decoration:none;color:inherit}
+
+  /* LANG TOGGLE */
+  .lang-switcher{display:flex;align-items:center;gap:2px;background:var(--nr-linen);border-radius:var(--radius-full);padding:3px;border:1px solid var(--nr-linen-mid)}
+  .lang-btn{padding:4px 12px;border-radius:var(--radius-full);font-size:12px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--nr-muted);font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:5px}
+  .lang-btn.active{background:#fff;color:var(--nr-dark);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+  .lang-btn span{font-size:14px}
+  .script-sub{display:flex;gap:4px;margin-left:4px}
+  .script-btn{padding:3px 8px;border-radius:var(--radius-full);font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--nr-muted);font-family:inherit;transition:all .15s}
+  .script-btn.active{background:var(--nr-teal-light);color:var(--nr-teal)}
+  .lang-divider{width:1px;height:20px;background:var(--nr-linen-mid);margin:0 4px}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--nr-linen-mid);display:flex;align-items:center;justify-content:space-between;padding:14px 48px;gap:16px}
+  .logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .logo-mark{width:34px;height:34px;border-radius:8px;background:var(--nr-dark);display:flex;align-items:center;justify-content:center}
+  .logo-mark i{font-size:18px;color:var(--nr-teal-light)}
+  .logo-name .l1{font-size:15px;font-weight:600;color:var(--nr-dark)}
+  .logo-name .l2{font-size:12px;color:var(--nr-teal)}
+  .nav-links{display:flex;gap:24px}
+  .nav-links a{font-size:14px;color:var(--nr-muted);transition:color .15s}
+  .nav-links a:hover{color:var(--nr-teal)}
+  .nav-right{display:flex;gap:10px;align-items:center;flex-shrink:0}
+  .btn{padding:8px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--nr-linen-mid);background:#fff;color:var(--nr-dark);font-family:inherit;transition:all .15s}
+  .btn:hover{background:var(--nr-linen)}
+  .btn-p{background:var(--nr-teal);color:#fff;border-color:var(--nr-teal)}
+  .btn-p:hover{background:var(--nr-teal-mid);border-color:var(--nr-teal-mid)}
+  .btn-outline{border-color:var(--nr-teal);color:var(--nr-teal);background:transparent}
+  .btn-outline:hover{background:var(--nr-teal-light)}
+  .btn-lg{padding:12px 26px;font-size:15px;border-radius:var(--radius)}
+
+  /* HERO */
+  .hero{background:var(--nr-linen);padding:80px 48px 64px;display:flex;align-items:center;gap:48px}
+  .hero-left{flex:1;max-width:580px}
+  .hero-right{flex:1;display:flex;justify-content:center}
+  .hero-card{background:#fff;border-radius:16px;padding:28px;border:1px solid var(--nr-linen-mid);max-width:340px;width:100%;box-shadow:0 4px 24px rgba(61,43,31,.08)}
+  .eyebrow-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:var(--radius-full);background:var(--nr-teal-light);color:var(--nr-teal);font-size:12px;font-weight:500;margin-bottom:22px;border:1px solid #A8D8D0}
+  .hero h1{font-size:38px;font-weight:600;line-height:1.2;color:var(--nr-dark);margin-bottom:16px}
+  .hero h1 span{color:var(--nr-teal)}
+  .hero p{font-size:16px;color:var(--nr-muted);line-height:1.75;margin-bottom:32px}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+  .trust-row{display:flex;gap:20px;flex-wrap:wrap}
+  .trust-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--nr-muted)}
+  .trust-item i{color:var(--nr-teal);font-size:16px}
+  .hc-label{font-size:11px;font-weight:500;color:var(--nr-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+  .hc-stat{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--nr-linen-mid)}
+  .hc-stat:last-child{border-bottom:none}
+  .hc-icon{width:36px;height:36px;border-radius:8px;background:var(--nr-teal-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .hc-icon i{font-size:18px;color:var(--nr-teal)}
+  .hc-val{font-size:18px;font-weight:600;color:var(--nr-dark)}
+  .hc-sub{font-size:12px;color:var(--nr-muted)}
+  .hc-featured{background:var(--nr-teal-light);border-radius:10px;padding:14px;border:1.5px solid #A8D8D0;margin-bottom:4px}
+
+  /* STATS */
+  .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);background:var(--nr-dark)}
+  .stat-cell{padding:26px 32px;border-right:1px solid #5A3E30;text-align:center}
+  .stat-cell:last-child{border-right:none}
+  .stat-num{font-size:28px;font-weight:600;color:#fff;margin-bottom:4px}
+  .stat-sub{font-size:13px;color:#A08878}
+
+  /* SECTIONS */
+  .section{padding:64px 48px}
+  .section.tint{background:var(--nr-linen)}
+  .section.teal-tint{background:var(--nr-teal-pale)}
+  .sec-eyebrow{font-size:12px;font-weight:600;color:var(--nr-teal);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+  .section h2{font-size:28px;font-weight:600;color:var(--nr-dark);margin-bottom:10px}
+  .section-sub{font-size:15px;color:var(--nr-muted);max-width:520px;line-height:1.7;margin-bottom:36px}
+  .divider{height:1px;background:var(--nr-linen-mid)}
+
+  /* SERVICES */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .svc{background:#fff;border:1px solid var(--nr-linen-mid);border-radius:var(--radius);padding:24px;transition:border-color .15s,background .15s}
+  .svc:hover{border-color:#A8D8D0;background:var(--nr-teal-pale)}
+  .svc.core{border:2px solid #A8D8D0}
+  .core-badge{display:inline-block;padding:3px 10px;border-radius:var(--radius-full);background:var(--nr-teal-light);color:var(--nr-teal);font-size:11px;font-weight:600;margin-bottom:12px}
+  .svc-icon{width:44px;height:44px;border-radius:10px;background:var(--nr-teal-light);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .svc-icon i{font-size:22px;color:var(--nr-teal)}
+  .svc h3{font-size:15px;font-weight:600;color:var(--nr-dark);margin-bottom:8px}
+  .svc p{font-size:13px;color:var(--nr-muted);line-height:1.65}
+
+  /* STEPS */
+  .steps-wrap{border:1px solid var(--nr-linen-mid);border-radius:var(--radius);overflow:hidden;background:#fff}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr)}
+  .step{padding:28px;border-right:1px solid var(--nr-linen-mid)}
+  .step:last-child{border-right:none}
+  .step-n{width:32px;height:32px;border-radius:50%;background:var(--nr-teal);color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .step h3{font-size:14px;font-weight:600;color:var(--nr-dark);margin-bottom:6px}
+  .step p{font-size:13px;color:var(--nr-muted);line-height:1.6}
+
+  /* PRICING */
+  .toggle-wrap{display:flex;align-items:center;justify-content:center;gap:14px;padding:28px;border-bottom:1px solid var(--nr-linen-mid);background:#fff}
+  .tl{font-size:14px;color:var(--nr-muted);transition:color .15s}
+  .tl.on{font-weight:600;color:var(--nr-dark)}
+  .toggle-track{width:48px;height:26px;border-radius:999px;background:var(--nr-teal);border:none;cursor:pointer;position:relative;flex-shrink:0}
+  .toggle-dot{width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .2s}
+  .save-pill{padding:4px 12px;border-radius:var(--radius-full);background:#FEF9C3;color:#92400E;font-size:12px;font-weight:600;border:1px solid #FDE68A}
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+  .tier{background:#fff;border:1px solid var(--nr-linen-mid);border-radius:var(--radius);padding:26px;position:relative}
+  .tier.pop{border:2px solid var(--nr-teal)}
+  .pop-ribbon{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--nr-teal);color:#fff;font-size:11px;font-weight:600;padding:4px 16px;border-radius:0 0 10px 10px;white-space:nowrap}
+  .tbadge{display:inline-block;padding:4px 12px;border-radius:var(--radius-full);background:var(--nr-teal-light);color:var(--nr-teal);font-size:11px;font-weight:600;margin-bottom:14px}
+  .tier h3{font-size:17px;font-weight:600;color:var(--nr-dark);margin-bottom:4px}
+  .tier-who{font-size:13px;color:var(--nr-muted);margin-bottom:16px}
+  .price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:4px}
+  .price-main{font-size:30px;font-weight:700;color:var(--nr-dark)}
+  .price-unit{font-size:14px;color:var(--nr-muted)}
+  .price-sub{font-size:12px;color:var(--nr-muted);margin-bottom:4px;min-height:18px}
+  .price-maint{display:flex;align-items:center;gap:7px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--nr-teal-light);margin:14px 0 18px;font-size:13px;color:var(--nr-teal);font-weight:500}
+  .price-maint i{font-size:16px;flex-shrink:0}
+  .price-maint span{color:var(--nr-dark)}
+  .price-maint.muted{background:var(--nr-linen);color:var(--nr-brown)}
+  .price-maint.muted span{color:var(--nr-dark)}
+  .feat-label{font-size:11px;font-weight:600;color:var(--nr-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;margin-top:16px}
+  .feats{list-style:none;margin-bottom:20px}
+  .feats li{font-size:13px;color:var(--nr-muted);padding:5px 0;display:flex;align-items:flex-start;gap:8px;border-bottom:1px solid var(--nr-linen-mid);line-height:1.5}
+  .feats li:last-child{border-bottom:none}
+  .feats li i{font-size:15px;color:var(--nr-teal);flex-shrink:0;margin-top:1px}
+  .feats li i.no{color:#C0A898}
+  .feats li.hi{color:var(--nr-teal)}
+  .markup-band{background:var(--nr-dark);border-radius:var(--radius);padding:22px 28px;display:flex;align-items:flex-start;gap:18px}
+  .markup-band i.big{font-size:30px;color:var(--nr-teal-light);flex-shrink:0;margin-top:2px}
+  .markup-band h4{font-size:15px;font-weight:600;color:#fff;margin-bottom:6px}
+  .markup-band p{font-size:13px;color:#A08878;line-height:1.65}
+  .markup-band strong{color:var(--nr-teal-light)}
+
+  /* MAINTENANCE */
+  .maint-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .maint-item{background:#fff;border:1px solid var(--nr-linen-mid);border-radius:var(--radius);padding:20px;display:flex;gap:14px}
+  .maint-icon{width:42px;height:42px;border-radius:10px;background:var(--nr-teal-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .maint-icon i{font-size:20px;color:var(--nr-teal)}
+  .maint-item h4{font-size:14px;font-weight:600;color:var(--nr-dark);margin-bottom:5px}
+  .maint-item p{font-size:13px;color:var(--nr-muted);line-height:1.6}
+
+  /* CALC */
+  .calc-wrap{background:#fff;border:1px solid var(--nr-linen-mid);border-radius:var(--radius);padding:28px}
+  .calc-wrap h3{font-size:17px;font-weight:600;color:var(--nr-dark);margin-bottom:22px}
+  .calc-row{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+  .calc-row label{font-size:14px;color:var(--nr-muted);min-width:220px}
+  .calc-row input[type=range]{flex:1;accent-color:var(--nr-teal)}
+  .calc-row .val{font-size:14px;font-weight:600;color:var(--nr-dark);min-width:80px;text-align:right}
+  .calc-results{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px;padding-top:22px;border-top:1px solid var(--nr-linen-mid)}
+  .cr{background:var(--nr-linen);border-radius:var(--radius-sm);padding:16px;text-align:center}
+  .cr-num{font-size:22px;font-weight:700;color:var(--nr-teal);margin-bottom:4px}
+  .cr-label{font-size:12px;color:var(--nr-muted);line-height:1.4}
+  .cr.neg .cr-num{color:#B45309}
+  .cr.total{background:var(--nr-dark)}
+  .cr.total .cr-num{color:#fff}
+  .cr.total .cr-label{color:#A08878}
+
+  /* REVIEWS */
+  .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .rev{background:#fff;border:1px solid var(--nr-linen-mid);border-radius:var(--radius);padding:22px}
+  .rev-stars{color:var(--nr-teal);font-size:16px;margin-bottom:12px}
+  .rev-q{font-size:14px;color:var(--nr-muted);line-height:1.7;margin-bottom:18px;font-style:italic}
+  .rev-author{display:flex;align-items:center;gap:10px}
+  .av{width:36px;height:36px;border-radius:50%;background:var(--nr-teal-light);color:var(--nr-teal);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .av-name{font-size:13px;font-weight:600;color:var(--nr-dark)}
+  .av-role{font-size:12px;color:var(--nr-muted)}
+
+  /* FAQ */
+  .faq-item{border-bottom:1px solid var(--nr-linen-mid);padding:20px 0;cursor:pointer}
+  .faq-item:first-child{border-top:1px solid var(--nr-linen-mid)}
+  .faq-q{font-size:15px;font-weight:500;color:var(--nr-dark);display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .faq-q i{font-size:18px;color:var(--nr-teal);transition:transform .2s;flex-shrink:0}
+  .faq-a{font-size:14px;color:var(--nr-muted);line-height:1.75;margin-top:10px;display:none;max-width:640px}
+  .faq-item.open .faq-a{display:block}
+  .faq-item.open .faq-q i{transform:rotate(45deg)}
+
+  /* CTA */
+  .cta-band{background:var(--nr-dark);padding:64px 48px;display:flex;align-items:center;justify-content:space-between;gap:32px}
+  .cta-band h2{font-size:28px;font-weight:600;color:#fff;margin-bottom:10px}
+  .cta-band p{font-size:15px;color:#A08878;line-height:1.7;max-width:460px}
+  .cta-btns{display:flex;gap:12px;flex-shrink:0}
+  .btn-cta{background:var(--nr-teal);color:#fff;border:none;padding:13px 26px;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:background .15s}
+  .btn-cta:hover{background:var(--nr-teal-mid)}
+  .btn-ghost{background:transparent;color:#C4B5AC;border:1px solid #5A3E30;padding:13px 26px;border-radius:var(--radius);font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s}
+  .btn-ghost:hover{background:#5A3E30;color:#fff}
+
+  /* FOOTER */
+  footer{background:var(--nr-linen);border-top:1px solid var(--nr-linen-mid);padding:48px 48px 0}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;padding-bottom:40px}
+  .footer-brand p{font-size:13px;color:var(--nr-muted);margin-top:12px;line-height:1.7;max-width:220px}
+  .footer-col h4{font-size:13px;font-weight:600;color:var(--nr-dark);margin-bottom:14px}
+  .footer-col a{display:block;font-size:13px;color:var(--nr-muted);margin-bottom:8px;transition:color .15s}
+  .footer-col a:hover{color:var(--nr-teal)}
+  .footer-bottom{border-top:1px solid var(--nr-linen-mid);padding:18px 0;display:flex;justify-content:space-between;font-size:12px;color:var(--nr-muted)}
+
+  @media(max-width:900px){
+    nav{padding:14px 20px}.nav-links{display:none}
+    .hero{flex-direction:column;padding:40px 20px}.hero-right{display:none}
+    .stats-bar,.steps,.tiers,.svc-grid,.maint-grid,.reviews,.calc-results{grid-template-columns:1fr}
+    .section{padding:40px 20px}
+    .footer-grid{grid-template-columns:1fr 1fr}
+    .cta-band{flex-direction:column;padding:40px 20px;text-align:center}
+    .cta-btns{justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== CONTENT DATA ==================== -->
+<script>
+const CONTENT = {
+  en: {
+    nav: { links:['Services','How it works','Pricing','Marketplace','Clients','Contact'], signin:'Sign in', cta:'Get a free consultation' },
+    hero: {
+      eyebrow:'Dallas-based · Boutique fleet management',
+      h1:'Hands-on fleet management.<br><span>Real results.</span><br>Zero hassle.',
+      p:"We're a small, dedicated team managing Turo vehicles in the Dallas area. Every client gets our full attention — not a ticket number.",
+      cta1:'Start earning with your fleet →', cta2:'See how it works',
+      trust:['Turo-experienced operators','Transparent reporting','Full lifecycle management'],
+      card:{ label:'Why clients trust us · Dallas, TX', rating:'Top-rated host on the platform', ratio:'Manager-to-vehicle ratio', response:'Response commitment' }
+    },
+    stats:['Turo host rating','Manager-to-vehicle ratio','DFW area coverage','Response commitment'],
+    statsVal:['4.9★','1:5','Dallas','24 hr'],
+    svc:{
+      eyebrow:'What we do', h2:'Two core services. One trusted partner.',
+      sub:"Whether you already own vehicles or want to build a fleet from scratch, we manage every step of the journey.",
+      badge:'Core service',
+      items:[
+        {icon:'ti-car', title:'Turo Fleet Management', body:'We list, price, schedule, and manage your vehicles on Turo. Guest communication, key handoffs, damage claims — handled for you.', core:true},
+        {icon:'ti-replace', title:'Vehicle Acquisition & Disposal', body:'We source the right vehicles for your fleet goals and manage resale or trade-in when it\'s time to cycle them out.', core:true},
+        {icon:'ti-chart-bar', title:'Performance Reporting', body:'Monthly dashboards with trip revenue, utilization, and net earnings broken down per vehicle.'},
+        {icon:'ti-tool', title:'Maintenance Coordination', body:'We schedule and oversee preventative maintenance to keep your fleet road-ready and Turo-compliant.'},
+        {icon:'ti-cash', title:'Dynamic Pricing Strategy', body:'Daily Turo price optimization based on demand, seasonality, and local events to maximize yield.'},
+        {icon:'ti-shield', title:'Insurance & Claims Support', body:'We navigate Turo protection plans and handle damage documentation and claims on your behalf.'}
+      ]
+    },
+    how:{
+      eyebrow:'How it works', h2:'Up and earning in four steps',
+      sub:'From your first call to your first payout — we manage the process end to end.',
+      steps:[
+        {n:'1',title:'Free Consultation', body:'We assess your vehicles, goals, and market to build a fleet strategy tailored to you.'},
+        {n:'2',title:'Onboard & List', body:'Professional photos, optimized descriptions, and smart Turo pricing — all set up for you.'},
+        {n:'3',title:'We Operate', body:'Guest management, trip approvals, handoffs, and maintenance — we run the day-to-day.'},
+        {n:'4',title:'You Collect', body:'Monthly payouts and transparent reports. Reinvest, grow your fleet, or cash out.'}
+      ]
+    },
+    pricing:{
+      eyebrow:'Pricing', h2:'Simple, transparent plans',
+      sub:"We earn when you earn. Our hybrid model aligns our success directly with your fleet's performance — no hidden fees, ever.",
+      mo:'Monthly billing', yr:'Annual billing', save:'Save ~8%',
+      tiers:[
+        { badge:'Solo owner · 1–3 vehicles', name:'Starter', who:'For individual owners new to Turo hosting',
+          price:'30%', unit:'of trip revenue', sub:'No monthly minimums',
+          maintLabel:'Maintenance: ', maintVal:'client-managed', maintMuted:true,
+          sections:[
+            { label:'Turo operations', items:[{icon:'ti-check',text:'Listing setup & professional photos'},{icon:'ti-check',text:'Guest communication & trip approvals'},{icon:'ti-check',text:'Dynamic pricing optimization'},{icon:'ti-check',text:'Damage documentation & claims'},{icon:'ti-check',text:'Monthly revenue report'}] },
+            { label:'Maintenance', items:[{icon:'ti-x no',text:'Maintenance coordination'},{icon:'ti-x no',text:'Vendor management'},{icon:'ti-x no',text:'Prepaid maintenance pool'}] }
+          ], cta:'Get started', pop:false },
+        { badge:'Small fleet · 4–20 vehicles', name:'Growth', who:'Fully hands-off fleet ownership',
+          price:'30%', unit:'of trip revenue', sub:'+ $69/vehicle/month coordination fee',
+          maintLabel:'Maintenance: ', maintVal:'fully coordinated by us', maintMuted:false,
+          sections:[
+            { label:'Turo operations', items:[{icon:'ti-check',text:'Everything in Starter'},{icon:'ti-check',text:'Dedicated account manager'},{icon:'ti-check',text:'Priority guest support'},{icon:'ti-check',text:'Fleet utilization dashboard'}] },
+            { label:'Maintenance coordination included', hi:true, items:[{icon:'ti-check',text:'Full vendor scheduling & oversight'},{icon:'ti-check',text:'Preferred shop network access'},{icon:'ti-check',text:'Prepaid maintenance pool option'},{icon:'ti-check',text:'Itemized maintenance reporting'},{icon:'ti-check',text:'Breakdown & emergency response'}] }
+          ], cta:'Get started', pop:true, ribbon:'⭐ Most popular' },
+        { badge:'Specialty vehicles', name:'Fleet Pro', who:'Cargo vans, box trucks & equipment',
+          price:'Custom', unit:'', sub:'Tailored to vehicle type & use case',
+          maintLabel:'Maintenance: ', maintVal:'specialist-coordinated', maintMuted:false,
+          sections:[
+            { label:'Specialty vehicle types', items:[{icon:'ti-truck-delivery',text:'Cargo vans (Transit, ProMaster)'},{icon:'ti-box',text:'Box trucks & moving vehicles'},{icon:'ti-tractor',text:'Equipment & work vehicles'}] },
+            { label:'Everything in Growth, plus', items:[{icon:'ti-check',text:'Specialty vehicle acquisition sourcing'},{icon:'ti-check',text:'Commercial-grade maintenance network'},{icon:'ti-check',text:'Disposal & resale management'},{icon:'ti-check',text:'Custom reporting & compliance docs'},{icon:'ti-check',text:'Priority legal & claims support'}] }
+          ], cta:'Contact us', pop:false }
+      ],
+      band:{ h:'How our maintenance coordination fee works', p:'For Growth and Fleet Pro clients, we charge a flat <strong>$69/vehicle/month</strong> coordination fee covering all scheduling, vendor management, and quality oversight. Actual repair and parts invoices are passed through at cost — fully itemized, no markups.' }
+    },
+    maint:{
+      eyebrow:'Maintenance services', h2:'What maintenance coordination includes',
+      sub:"We don't just book appointments — we manage your entire vehicle health program so your fleet stays on the road and generating revenue.",
+      items:[
+        {icon:'ti-calendar',title:'Preventative Scheduling',body:'Oil changes, tire rotations, brake checks — proactively scheduled around your Turo calendar to minimize downtime.'},
+        {icon:'ti-building-store',title:'Preferred Vendor Network',body:'Volume relationships with trusted local shops for priority service and competitive labor rates.'},
+        {icon:'ti-credit-card',title:'Prepaid Maintenance Pool',body:'Optional: pre-fund a per-vehicle account. We draw from it and replenish — no surprise invoices mid-month.'},
+        {icon:'ti-file-description',title:'Itemized Reporting',body:'Every invoice is logged, categorized, and included in your monthly fleet report with full cost transparency.'},
+        {icon:'ti-alert-triangle',title:'Breakdown & Emergency Response',body:'If a guest reports an issue mid-trip, we coordinate roadside, towing, and repair at no extra coordination charge.'},
+        {icon:'ti-clipboard-check',title:'Turo Compliance Checks',body:"We ensure all vehicles meet Turo's condition and safety standards before every rental cycle."}
+      ]
+    },
+    calc:{
+      eyebrow:'Revenue estimator', h2:'See what your fleet could earn',
+      sub:'Adjust the sliders to estimate your net monthly revenue under the Growth plan.',
+      h3:'Fleet revenue calculator — Growth plan',
+      labels:['Number of vehicles','Avg. revenue / vehicle / month','Est. maintenance cost / vehicle'],
+      resultLabels:['Gross Turo revenue','Mgmt fee (30%)','Coord. fee ($69/vehicle)','Est. net / month']
+    },
+    testimonials:{
+      eyebrow:'Client stories', h2:'Early clients. Honest feedback.',
+      sub:"We're building our reputation one vehicle at a time. Here's what our current clients say about working with us.",
+      items:[
+        {stars:'★★★★★', q:'"I was nervous handing over my truck to someone I just met. But within the first week it was listed, cleaned, and booked. Couldn\'t be happier."', name:'James T.', role:'1-vehicle owner · Dallas'},
+        {stars:'★★★★★', q:'"What I appreciate most is that I actually talk to the person running my vehicle — not a support ticket. That personal touch matters."', name:'Maria L.', role:'2-vehicle owner · Plano'},
+        {stars:'★★★★★', q:'"Still early days but the communication is excellent and the listing setup was way better than what I had before. Bookings picked up fast."', name:'R. Kim', role:'1-vehicle owner · Irving'}
+      ]
+    },
+    faq:{
+      eyebrow:'Common questions', h2:'Pricing FAQ',
+      sub:'Straightforward answers about how our fees work.',
+      items:[
+        {q:'Is the maintenance invoice passed through at cost with no markup?', a:'Yes — for Growth and Fleet Pro clients, actual repair and parts costs are passed through at 100% of the vendor invoice. Our revenue on maintenance comes only from the flat $69/vehicle/month coordination fee, not from markups on repairs.'},
+        {q:'Can I stay on Starter and add maintenance coordination later?', a:'Absolutely. You can upgrade to Growth at any time. Many clients start on Starter and move to Growth once they see the value of having maintenance fully off their plate.'},
+        {q:'How does the prepaid maintenance pool work?', a:'You fund a per-vehicle account (minimum $300/vehicle). We draw from it for approved maintenance and send you a replenishment request when it drops below a threshold you set. You approve all work over $200 before we proceed.'},
+        {q:'What if my vehicle needs a major repair?', a:'For repairs over $200, we get your approval before proceeding. We\'ll provide at least one quote from our vendor network and a recommendation — the decision is always yours.'},
+        {q:'Are there setup or cancellation fees?', a:'No setup fees. We require 30 days written notice to offboard a vehicle. There are no long-term contracts — we earn your business every month.'},
+        {q:'Do you work with specialty vehicles like cargo vans and box trucks?', a:'Yes — our Fleet Pro tier is purpose-built for specialty and commercial vehicles. We have vendor relationships with commercial-grade shops experienced in high-roof vans, box trucks, and work equipment.'}
+      ]
+    },
+    cta:{ h2:"Let's start a conversation.", p:"We're selectively taking on new vehicles in the Dallas area. If you want a hands-on operator who answers your calls and treats your asset with care — let's talk.", cta1:'Book free consultation →', cta2:'Call us today' },
+    footer:{
+      tagline:'Professional Turo fleet management and vehicle acquisition services. Based in Dallas, TX.',
+      cols:[
+        { h:'Services', links:['Turo fleet management','Vehicle acquisition','Vehicle disposal','Specialty vehicles'] },
+        { h:'Company', links:['About us','Pricing','Case studies','Contact'] },
+        { h:'Contact', links:['Dallas, TX','info@newrootssolution.com','Schedule a call'] }
+      ],
+      copy:'© 2026 New Roots Solution LLC. All rights reserved.',
+      legal:'Privacy Policy · Terms of Service'
+    }
+  },
+
+  sc: {
+    nav: { links:['服务','运营流程','价格方案','车辆市场','客户案例','联系我们'], signin:'登录', cta:'预约免费咨询' },
+    hero: {
+      eyebrow:'达拉斯本地 · 精品车队管理',
+      h1:'亲力亲为的车队管理。<br><span>真实成果。</span><br>零烦恼。',
+      p:'我们是一支专注于达拉斯地区Turo车辆管理的精干团队。每位客户都享有我们的全力关注——而不是一个工单编号。',
+      cta1:'让您的车队开始盈利 →', cta2:'了解运营流程',
+      trust:['Turo平台运营经验丰富','透明的收入报告','全生命周期管理'],
+      card:{ label:'为什么客户信任我们 · 达拉斯', rating:'平台顶级房东', ratio:'管理员与车辆比例', response:'响应承诺' }
+    },
+    stats:['Turo房东评分','管理员与车辆比','服务覆盖区域','响应承诺'],
+    statsVal:['4.9★','1:5','达拉斯','24小时'],
+    svc:{
+      eyebrow:'我们的服务', h2:'两大核心服务。一个可信赖的合作伙伴。',
+      sub:'无论您已拥有车辆还是希望从零开始组建车队，我们全程管理每一个环节。',
+      badge:'核心服务',
+      items:[
+        {icon:'ti-car', title:'Turo车队管理', body:'我们负责您车辆在Turo平台上的发布、定价、调度和管理——包括租客沟通、钥匙交接、损坏理赔，全部为您处理。', core:true},
+        {icon:'ti-replace', title:'车辆采购与处置', body:'我们根据您的车队目标，为您物色合适的车辆，并在适当时机管理转售或以旧换新。', core:true},
+        {icon:'ti-chart-bar', title:'业绩报告', body:'每月为您提供仪表盘报告，展示按车辆细分的行程收入、使用率和净收益。'},
+        {icon:'ti-tool', title:'维护协调', body:'我们安排并监督预防性维护工作，确保您的车队随时处于良好状态并符合Turo要求。'},
+        {icon:'ti-cash', title:'动态定价策略', body:'根据需求、季节性和本地活动，每日优化Turo挂牌价格，最大化收益。'},
+        {icon:'ti-shield', title:'保险与理赔支持', body:'我们帮助您了解Turo保障计划，并代表您处理损坏记录和理赔事宜。'}
+      ]
+    },
+    how:{
+      eyebrow:'运营流程', h2:'四步开启盈利之旅',
+      sub:'从您的第一次通话到第一笔收款——我们全程管理每一个环节。',
+      steps:[
+        {n:'1',title:'免费咨询', body:'我们评估您的车辆、目标和市场，为您量身定制车队策略。'},
+        {n:'2',title:'入驻与发布', body:'专业拍摄、优化文案、智能定价——一切由我们为您搞定。'},
+        {n:'3',title:'我们运营', body:'房客管理、行程审批、交接和维护——日常运营全由我们负责。'},
+        {n:'4',title:'您来收款', body:'每月收款并获得透明报告。再投资、扩大车队，或直接提现。'}
+      ]
+    },
+    pricing:{
+      eyebrow:'价格方案', h2:'简单透明的价格体系',
+      sub:'我们与您共同盈利。混合收费模式将我们的成功与您车队的业绩直接挂钩——永远没有隐性费用。',
+      mo:'按月计费', yr:'按年计费', save:'节省约8%',
+      tiers:[
+        { badge:'个人车主 · 1–3辆', name:'入门版', who:'适合刚开始使用Turo的个人车主',
+          price:'30%', unit:'行程收入抽成', sub:'无月度最低消费',
+          maintLabel:'车辆维护：', maintVal:'客户自行负责', maintMuted:true,
+          sections:[
+            { label:'Turo运营', items:[{icon:'ti-check',text:'挂牌设置及专业拍摄'},{icon:'ti-check',text:'租客沟通及行程审批'},{icon:'ti-check',text:'动态定价优化'},{icon:'ti-check',text:'损坏记录及理赔'},{icon:'ti-check',text:'每月收入报告'}] },
+            { label:'维护服务', items:[{icon:'ti-x no',text:'维护协调'},{icon:'ti-x no',text:'供应商管理'},{icon:'ti-x no',text:'预付维护备用金'}] }
+          ], cta:'立即开始', pop:false },
+        { badge:'小型车队 · 4–20辆', name:'成长版', who:'全托管车队所有权',
+          price:'30%', unit:'行程收入抽成', sub:'+ 每辆车每月69美元协调费',
+          maintLabel:'车辆维护：', maintVal:'由我们全面协调', maintMuted:false,
+          sections:[
+            { label:'Turo运营', items:[{icon:'ti-check',text:'包含入门版全部内容'},{icon:'ti-check',text:'专属客户经理'},{icon:'ti-check',text:'优先租客支持'},{icon:'ti-check',text:'车队使用率仪表盘'}] },
+            { label:'已包含维护协调服务', hi:true, items:[{icon:'ti-check',text:'全程供应商调度与监督'},{icon:'ti-check',text:'优选维修网络接入'},{icon:'ti-check',text:'预付维护备用金选项'},{icon:'ti-check',text:'详细维护费用报告'},{icon:'ti-check',text:'故障及紧急救援响应'}] }
+          ], cta:'立即开始', pop:true, ribbon:'⭐ 最受欢迎' },
+        { badge:'特种车辆', name:'车队专业版', who:'货车、厢式货车及工程车辆',
+          price:'定制', unit:'', sub:'根据车辆类型和用途量身定制',
+          maintLabel:'车辆维护：', maintVal:'专业技师协调', maintMuted:false,
+          sections:[
+            { label:'特种车辆类型', items:[{icon:'ti-truck-delivery',text:'货运厢式车（全顺、ProMaster）'},{icon:'ti-box',text:'厢式货车及搬家车辆'},{icon:'ti-tractor',text:'工程及作业车辆'}] },
+            { label:'包含成长版全部内容，额外提供', items:[{icon:'ti-check',text:'特种车辆采购服务'},{icon:'ti-check',text:'商用级维护网络'},{icon:'ti-check',text:'处置及转售管理'},{icon:'ti-check',text:'定制报告及合规文件'},{icon:'ti-check',text:'优先法律及理赔支持'}] }
+          ], cta:'联系我们', pop:false }
+      ],
+      band:{ h:'维护协调费用说明', p:'成长版和车队专业版客户需支付固定的 <strong>每辆车每月69美元</strong> 协调费，涵盖所有调度、供应商管理和质量监督工作。实际维修和零件费用按成本全额透明转交给客户——无任何加价。' }
+    },
+    maint:{
+      eyebrow:'维护服务', h2:'维护协调服务包含哪些内容',
+      sub:'我们不只是预约维修——我们管理您车辆的整个健康计划，确保您的车队持续在路上创造收益。',
+      items:[
+        {icon:'ti-calendar',title:'预防性保养排期',body:'机油更换、轮胎旋转、制动检查——提前围绕您的Turo日历安排，最大程度减少停运时间。'},
+        {icon:'ti-building-store',title:'优选供应商网络',body:'与本地可信赖修理厂建立批量合作关系，享受优先服务和有竞争力的工时费率。'},
+        {icon:'ti-credit-card',title:'预付维护备用金',body:'可选方案：为每辆车预先存入资金，我们从中支取并在余额不足时通知您补充——告别月中意外账单。'},
+        {icon:'ti-file-description',title:'详细费用报告',body:'每笔账单均记录在案并分类归档，纳入您的月度车队报告，实现完全成本透明。'},
+        {icon:'ti-alert-triangle',title:'故障及紧急救援响应',body:'若租客在行程中报告故障，我们负责协调道路救援、拖车和维修，不额外收取协调费。'},
+        {icon:'ti-clipboard-check',title:'Turo合规检查',body:'在每个租赁周期前，我们确保所有车辆符合Turo的车况和安全标准。'}
+      ]
+    },
+    calc:{
+      eyebrow:'收益估算', h2:'看看您的车队能赚多少',
+      sub:'拖动滑块，估算在成长版方案下（含维护协调服务）每月的净收益。',
+      h3:'车队收益计算器 — 成长版',
+      labels:['车辆数量','每辆车平均月收入','每辆车预估维护费用'],
+      resultLabels:['Turo总收入','管理费（30%）','协调费（$69/辆）','预计月净收益']
+    },
+    testimonials:{
+      eyebrow:'客户案例', h2:'初期客户·真实反馈',
+      sub:'我们一辆车一辆车地积累口碑。以下是现有客户对与我们合作的真实评价。',
+      items:[
+        {stars:'★★★★★', q:'"把自己的车交给刚认识的人，一开始我很紧张。但第一周内，车辆就完成了发布、清洁和预订。太满意了。"', name:'James T.', role:'1辆车 · 达拉斯'},
+        {stars:'★★★★★', q:'"我最欣赏的是，我可以直接和管理我车辆的人沟通——而不是提交工单。这种亲切感很重要。"', name:'Maria L.', role:'2辆车 · Plano'},
+        {stars:'★★★★★', q:'"目前还是初期阶段，但沟通非常顺畅，发布的页面比我之前自己做的好多了。预订量很快就上来了。"', name:'R. Kim', role:'1辆车 · Irving'}
+      ]
+    },
+    faq:{
+      eyebrow:'常见问题', h2:'价格方案常见问答',
+      sub:'关于收费方式的直白解答。',
+      items:[
+        {q:'维护账单是否按原价转交，不加价？', a:'是的——对于成长版和车队专业版客户，实际维修和零件费用按供应商发票100%原价转交。我们在维护方面的收入仅来自固定的每辆车每月69美元协调费，不对维修费用加价。'},
+        {q:'我可以先选入门版，之后再添加维护协调服务吗？', a:'当然可以。您可以随时升级到成长版。许多客户从入门版开始，在体验到将维护事宜完全外包的价值后，选择升级到成长版。'},
+        {q:'预付维护备用金是怎么运作的？', a:'您为每辆车预存一笔资金（最低每辆300美元）。我们从中支取已批准的维护费用，当余额低于您设定的阈值时，会向您发送补充请求。所有超过200美元的维修项目，均需您批准后才会进行。'},
+        {q:'如果我的车辆需要大修怎么办？', a:'对于超过200美元的维修，我们会在进行前征得您的同意。我们将从供应商网络中提供至少一份报价和建议——决定权始终在您手中。'},
+        {q:'有设置费或取消费吗？', a:'没有设置费。撤销车辆管理需提前30天书面通知。没有长期合同——我们每个月都需要靠服务质量来赢得您的信任。'},
+        {q:'你们处理货车、厢式货车等特种车辆吗？', a:'是的——我们的车队专业版专为特种和商用车辆设计。我们与具备高顶厢式车、厢式货车和工程车辆经验的商用级修理厂建立了合作关系。'}
+      ]
+    },
+    cta:{ h2:'让我们开始交流。', p:'我们正在达拉斯地区有针对性地接受新车辆委托。如果您希望找一个亲力亲为、接得到电话、真心爱护您资产的运营合伙人——欢迎联系。', cta1:'预约免费咨询 →', cta2:'立即致电' },
+    footer:{
+      tagline:'专业Turo车队管理及车辆采购服务。总部位于德克萨斯州达拉斯。',
+      cols:[
+        { h:'服务项目', links:['Turo车队管理','车辆采购','车辆处置','特种车辆'] },
+        { h:'关于我们', links:['公司介绍','价格方案','客户案例','联系我们'] },
+        { h:'联系方式', links:['德克萨斯州达拉斯','info@newrootssolution.com','预约通话'] }
+      ],
+      copy:'© 2026 New Roots Solution LLC 版权所有',
+      legal:'隐私政策 · 服务条款'
+    }
+  },
+
+  tc: {
+    nav: { links:['服務','運營流程','價格方案','車輛市場','客戶案例','聯絡我們'], signin:'登入', cta:'預約免費諮詢' },
+    hero: {
+      eyebrow:'達拉斯在地 · 精品車隊管理',
+      h1:'親力親為的車隊管理。<br><span>真實成果。</span><br>零煩惱。',
+      p:'我們是一支專注於達拉斯地區Turo車輛管理的精幹團隊。每位客戶都享有我們的全力關注——而不是一個工單號碼。',
+      cta1:'讓您的車隊開始獲利 →', cta2:'了解運營流程',
+      trust:['Turo平台運營經驗豐富','透明的收入報告','全生命週期管理'],
+      card:{ label:'為何客戶信任我們 · 達拉斯', rating:'平台頂級車主', ratio:'管理員與車輛比例', response:'回應承諾' }
+    },
+    stats:['Turo車主評分','管理員與車輛比','服務覆蓋區域','回應承諾'],
+    statsVal:['4.9★','1:5','達拉斯','24小時'],
+    svc:{
+      eyebrow:'我們的服務', h2:'兩大核心服務。一個值得信賴的合作夥伴。',
+      sub:'無論您已擁有車輛還是希望從零開始組建車隊，我們全程管理每一個環節。',
+      badge:'核心服務',
+      items:[
+        {icon:'ti-car', title:'Turo車隊管理', body:'我們負責您車輛在Turo平台上的發布、定價、調度和管理——包括租客溝通、鑰匙交接、損壞理賠，全部為您處理。', core:true},
+        {icon:'ti-replace', title:'車輛採購與處置', body:'我們根據您的車隊目標，為您物色合適的車輛，並在適當時機管理轉售或以舊換新。', core:true},
+        {icon:'ti-chart-bar', title:'績效報告', body:'每月為您提供儀表板報告，展示按車輛細分的行程收入、使用率和淨收益。'},
+        {icon:'ti-tool', title:'維護協調', body:'我們安排並監督預防性維護工作，確保您的車隊隨時處於良好狀態並符合Turo要求。'},
+        {icon:'ti-cash', title:'動態定價策略', body:'根據需求、季節性和在地活動，每日優化Turo掛牌價格，最大化收益。'},
+        {icon:'ti-shield', title:'保險與理賠支援', body:'我們協助您了解Turo保障方案，並代表您處理損壞記錄和理賠事宜。'}
+      ]
+    },
+    how:{
+      eyebrow:'運營流程', h2:'四步開啟獲利之旅',
+      sub:'從您的第一通電話到第一筆收款——我們全程管理每一個環節。',
+      steps:[
+        {n:'1',title:'免費諮詢', body:'我們評估您的車輛、目標和市場，為您量身定制車隊策略。'},
+        {n:'2',title:'入駐與發布', body:'專業拍攝、優化文案、智慧定價——一切由我們為您搞定。'},
+        {n:'3',title:'我們運營', body:'房客管理、行程審批、交接和維護——日常運營全由我們負責。'},
+        {n:'4',title:'您來收款', body:'每月收款並獲得透明報告。再投資、擴大車隊，或直接提現。'}
+      ]
+    },
+    pricing:{
+      eyebrow:'價格方案', h2:'簡單透明的價格體系',
+      sub:'我們與您共同獲利。混合收費模式將我們的成功與您車隊的業績直接掛鉤——永遠沒有隱性費用。',
+      mo:'按月計費', yr:'按年計費', save:'節省約8%',
+      tiers:[
+        { badge:'個人車主 · 1–3輛', name:'入門版', who:'適合剛開始使用Turo的個人車主',
+          price:'30%', unit:'行程收入抽成', sub:'無月度最低消費',
+          maintLabel:'車輛維護：', maintVal:'客戶自行負責', maintMuted:true,
+          sections:[
+            { label:'Turo運營', items:[{icon:'ti-check',text:'掛牌設置及專業拍攝'},{icon:'ti-check',text:'租客溝通及行程審批'},{icon:'ti-check',text:'動態定價優化'},{icon:'ti-check',text:'損壞記錄及理賠'},{icon:'ti-check',text:'每月收入報告'}] },
+            { label:'維護服務', items:[{icon:'ti-x no',text:'維護協調'},{icon:'ti-x no',text:'供應商管理'},{icon:'ti-x no',text:'預付維護備用金'}] }
+          ], cta:'立即開始', pop:false },
+        { badge:'小型車隊 · 4–20輛', name:'成長版', who:'全託管車隊所有權',
+          price:'30%', unit:'行程收入抽成', sub:'+ 每輛車每月69美元協調費',
+          maintLabel:'車輛維護：', maintVal:'由我們全面協調', maintMuted:false,
+          sections:[
+            { label:'Turo運營', items:[{icon:'ti-check',text:'包含入門版全部內容'},{icon:'ti-check',text:'專屬客戶經理'},{icon:'ti-check',text:'優先租客支援'},{icon:'ti-check',text:'車隊使用率儀表板'}] },
+            { label:'已包含維護協調服務', hi:true, items:[{icon:'ti-check',text:'全程供應商調度與監督'},{icon:'ti-check',text:'優選維修網路接入'},{icon:'ti-check',text:'預付維護備用金選項'},{icon:'ti-check',text:'詳細維護費用報告'},{icon:'ti-check',text:'故障及緊急救援響應'}] }
+          ], cta:'立即開始', pop:true, ribbon:'⭐ 最受歡迎' },
+        { badge:'特種車輛', name:'車隊專業版', who:'貨車、廂式貨車及工程車輛',
+          price:'定制', unit:'', sub:'根據車輛類型和用途量身定制',
+          maintLabel:'車輛維護：', maintVal:'專業技師協調', maintMuted:false,
+          sections:[
+            { label:'特種車輛類型', items:[{icon:'ti-truck-delivery',text:'貨運廂式車（全順、ProMaster）'},{icon:'ti-box',text:'廂式貨車及搬家車輛'},{icon:'ti-tractor',text:'工程及作業車輛'}] },
+            { label:'包含成長版全部內容，額外提供', items:[{icon:'ti-check',text:'特種車輛採購服務'},{icon:'ti-check',text:'商用級維護網路'},{icon:'ti-check',text:'處置及轉售管理'},{icon:'ti-check',text:'定制報告及合規文件'},{icon:'ti-check',text:'優先法律及理賠支援'}] }
+          ], cta:'聯絡我們', pop:false }
+      ],
+      band:{ h:'維護協調費用說明', p:'成長版和車隊專業版客戶需支付固定的 <strong>每輛車每月69美元</strong> 協調費，涵蓋所有調度、供應商管理和品質監督工作。實際維修和零件費用按成本全額透明轉交給客戶——無任何加價。' }
+    },
+    maint:{
+      eyebrow:'維護服務', h2:'維護協調服務包含哪些內容',
+      sub:'我們不只是預約維修——我們管理您車輛的整個健康計劃，確保您的車隊持續在路上創造收益。',
+      items:[
+        {icon:'ti-calendar',title:'預防性保養排期',body:'機油更換、輪胎旋轉、制動檢查——提前圍繞您的Turo行事曆安排，最大程度減少停運時間。'},
+        {icon:'ti-building-store',title:'優選供應商網路',body:'與本地可信賴修理廠建立批量合作關係，享受優先服務和具競爭力的工時費率。'},
+        {icon:'ti-credit-card',title:'預付維護備用金',body:'可選方案：為每輛車預先存入資金，我們從中支取並在餘額不足時通知您補充——告別月中意外帳單。'},
+        {icon:'ti-file-description',title:'詳細費用報告',body:'每筆帳單均記錄在案並分類歸檔，納入您的月度車隊報告，實現完全成本透明。'},
+        {icon:'ti-alert-triangle',title:'故障及緊急救援響應',body:'若租客在行程中回報故障，我們負責協調道路救援、拖車和維修，不額外收取協調費。'},
+        {icon:'ti-clipboard-check',title:'Turo合規檢查',body:'在每個租賃週期前，我們確保所有車輛符合Turo的車況和安全標準。'}
+      ]
+    },
+    calc:{
+      eyebrow:'收益估算', h2:'看看您的車隊能賺多少',
+      sub:'拖動滑桿，估算在成長版方案下（含維護協調服務）每月的淨收益。',
+      h3:'車隊收益計算器 — 成長版',
+      labels:['車輛數量','每輛車平均月收入','每輛車預估維護費用'],
+      resultLabels:['Turo總收入','管理費（30%）','協調費（$69/輛）','預計月淨收益']
+    },
+    testimonials:{
+      eyebrow:'客戶案例', h2:'初期客戶·真實回饋',
+      sub:'我們一輛車一輛車地積累口碑。以下是現有客戶對與我們合作的真實評價。',
+      items:[
+        {stars:'★★★★★', q:'"把自己的車交給剛認識的人，一開始我很緊張。但第一週內，車輛就完成了發布、清潔和預訂。太滿意了。"', name:'James T.', role:'1輛車 · 達拉斯'},
+        {stars:'★★★★★', q:'"我最欣賞的是，我可以直接和管理我車輛的人溝通——而不是提交工單。這種親切感很重要。"', name:'Maria L.', role:'2輛車 · Plano'},
+        {stars:'★★★★★', q:'"目前還是初期階段，但溝通非常順暢，發布的頁面比我之前自己做的好多了。預訂量很快就上來了。"', name:'R. Kim', role:'1輛車 · Irving'}
+      ]
+    },
+    faq:{
+      eyebrow:'常見問題', h2:'價格方案常見問答',
+      sub:'關於收費方式的直白解答。',
+      items:[
+        {q:'維護帳單是否按原價轉交，不加價？', a:'是的——對於成長版和車隊專業版客戶，實際維修和零件費用按供應商發票100%原價轉交。我們在維護方面的收入僅來自固定的每輛車每月69美元協調費，不對維修費用加價。'},
+        {q:'我可以先選入門版，之後再添加維護協調服務嗎？', a:'當然可以。您可以隨時升級到成長版。許多客戶從入門版開始，在體驗到將維護事宜完全外包的價值後，選擇升級到成長版。'},
+        {q:'預付維護備用金是怎麼運作的？', a:'您為每輛車預存一筆資金（最低每輛300美元）。我們從中支取已批准的維護費用，當餘額低於您設定的閾值時，會向您發送補充請求。所有超過200美元的維修項目，均需您批准後才會進行。'},
+        {q:'如果我的車輛需要大修怎麼辦？', a:'對於超過200美元的維修，我們會在進行前徵得您的同意。我們將從供應商網路中提供至少一份報價和建議——決定權始終在您手中。'},
+        {q:'有設置費或取消費嗎？', a:'沒有設置費。撤銷車輛管理需提前30天書面通知。沒有長期合約——我們每個月都需要靠服務品質來贏得您的信任。'},
+        {q:'你們處理貨車、廂式貨車等特種車輛嗎？', a:'是的——我們的車隊專業版專為特種和商用車輛設計。我們與具備高頂廂式車、廂式貨車和工程車輛經驗的商用級修理廠建立了合作關係。'}
+      ]
+    },
+    cta:{ h2:'讓我們開始交流。', p:'我們正在達拉斯地區有針對性地接受新車輛委託。如果您希望找一個親力親為、接得到電話、真心愛護您資產的運營合夥人——歡迎聯絡。', cta1:'預約免費諮詢 →', cta2:'立即致電' },
+    footer:{
+      tagline:'專業Turo車隊管理及車輛採購服務。總部位於德克薩斯州達拉斯。',
+      cols:[
+        { h:'服務項目', links:['Turo車隊管理','車輛採購','車輛處置','特種車輛'] },
+        { h:'關於我們', links:['公司介紹','價格方案','客戶案例','聯絡我們'] },
+        { h:'聯絡方式', links:['德克薩斯州達拉斯','info@newrootssolution.com','預約通話'] }
+      ],
+      copy:'© 2026 New Roots Solution LLC 版權所有',
+      legal:'隱私政策 · 服務條款'
+    }
+  }
+};
+
+let currentLang = 'en';
+let currentScript = 'sc'; // sc = simplified, tc = traditional
+let billingAnnual = false;
+
+function getLang(){ return currentLang === 'en' ? CONTENT.en : (currentScript === 'tc' ? CONTENT.tc : CONTENT.sc); }
+
+function setLang(lang){
+  currentLang = lang;
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.getElementById('btn-zh').classList.toggle('active', lang==='zh');
+  document.getElementById('script-sub').style.display = lang==='zh'?'flex':'none';
+  document.body.className = lang==='en' ? '' : (currentScript==='tc'?'tc':'sc');
+  render();
+}
+
+function setScript(s){
+  currentScript = s;
+  document.getElementById('btn-sc').classList.toggle('active', s==='sc');
+  document.getElementById('btn-tc').classList.toggle('active', s==='tc');
+  document.body.className = s==='tc'?'tc':'sc';
+  render();
+}
+
+function render(){
+  const d = getLang();
+  // nav
+  const navLinks = document.getElementById('nav-links');
+  navLinks.innerHTML = d.nav.links.map((l,i)=>`<a href="${i===3?'marketplace.html':'#'}">${l}</a>`).join('');
+  document.getElementById('nav-signin').textContent = d.nav.signin;
+  document.getElementById('nav-cta').textContent = d.nav.cta;
+  // hero
+  document.getElementById('hero-eyebrow').textContent = d.hero.eyebrow;
+  document.getElementById('hero-h1').innerHTML = d.hero.h1;
+  document.getElementById('hero-p').textContent = d.hero.p;
+  document.getElementById('hero-cta1').textContent = d.hero.cta1;
+  document.getElementById('hero-cta2').textContent = d.hero.cta2;
+  document.getElementById('hero-trust').innerHTML = d.hero.trust.map(t=>`<div class="trust-item"><i class="ti ti-check"></i>${t}</div>`).join('');
+  document.getElementById('hc-label').textContent = d.hero.card.label;
+  document.getElementById('hc-rating-sub').textContent = d.hero.card.rating;
+  document.getElementById('hc-ratio-sub').textContent = d.hero.card.ratio;
+  document.getElementById('hc-resp-sub').textContent = d.hero.card.response;
+  // stats
+  const cells = document.querySelectorAll('.stat-cell');
+  d.stats.forEach((s,i)=>{ cells[i].querySelector('.stat-num').textContent=d.statsVal[i]; cells[i].querySelector('.stat-sub').textContent=s; });
+  // services
+  document.getElementById('svc-eyebrow').textContent = d.svc.eyebrow;
+  document.getElementById('svc-h2').textContent = d.svc.h2;
+  document.getElementById('svc-sub').textContent = d.svc.sub;
+  document.getElementById('svc-grid').innerHTML = d.svc.items.map(s=>`
+    <div class="svc${s.core?' core':''}">
+      ${s.core?`<div class="core-badge">${d.svc.badge}</div>`:''}
+      <div class="svc-icon"><i class="ti ${s.icon}"></i></div>
+      <h3>${s.title}</h3><p>${s.body}</p>
+    </div>`).join('');
+  // how
+  document.getElementById('how-eyebrow').textContent = d.how.eyebrow;
+  document.getElementById('how-h2').textContent = d.how.h2;
+  document.getElementById('how-sub').textContent = d.how.sub;
+  document.getElementById('how-steps').innerHTML = d.how.steps.map(s=>`
+    <div class="step"><div class="step-n">${s.n}</div><h3>${s.title}</h3><p>${s.body}</p></div>`).join('');
+  // pricing
+  document.getElementById('pricing-eyebrow').textContent = d.pricing.eyebrow;
+  document.getElementById('pricing-h2').textContent = d.pricing.h2;
+  document.getElementById('pricing-sub').textContent = d.pricing.sub;
+  document.getElementById('lbl-mo').textContent = d.pricing.mo;
+  document.getElementById('lbl-yr').textContent = d.pricing.yr;
+  document.getElementById('save-pill').textContent = d.pricing.save;
+  renderTiers(d);
+  document.getElementById('band-h').textContent = d.pricing.band.h;
+  document.getElementById('band-p').innerHTML = d.pricing.band.p;
+  // maint
+  document.getElementById('maint-eyebrow').textContent = d.maint.eyebrow;
+  document.getElementById('maint-h2').textContent = d.maint.h2;
+  document.getElementById('maint-sub').textContent = d.maint.sub;
+  document.getElementById('maint-grid').innerHTML = d.maint.items.map(m=>`
+    <div class="maint-item"><div class="maint-icon"><i class="ti ${m.icon}"></i></div>
+    <div><h4>${m.title}</h4><p>${m.body}</p></div></div>`).join('');
+  // calc
+  document.getElementById('calc-eyebrow').textContent = d.calc.eyebrow;
+  document.getElementById('calc-h2').textContent = d.calc.h2;
+  document.getElementById('calc-sub').textContent = d.calc.sub;
+  document.getElementById('calc-h3').textContent = d.calc.h3;
+  const clabels = document.querySelectorAll('.calc-row label');
+  d.calc.labels.forEach((l,i)=>clabels[i].textContent=l);
+  const rlabels = document.querySelectorAll('.cr-label');
+  d.calc.resultLabels.forEach((l,i)=>rlabels[i].textContent=l);
+  // testimonials
+  document.getElementById('test-eyebrow').textContent = d.testimonials.eyebrow;
+  document.getElementById('test-h2').textContent = d.testimonials.h2;
+  document.getElementById('test-sub').textContent = d.testimonials.sub;
+  document.getElementById('reviews').innerHTML = d.testimonials.items.map(r=>`
+    <div class="rev"><div class="rev-stars">${r.stars}</div>
+    <div class="rev-q">${r.q}</div>
+    <div class="rev-author"><div class="av">${r.name.split(' ').map(n=>n[0]).join('')}</div>
+    <div><div class="av-name">${r.name}</div><div class="av-role">${r.role}</div></div></div></div>`).join('');
+  // faq
+  document.getElementById('faq-eyebrow').textContent = d.faq.eyebrow;
+  document.getElementById('faq-h2').textContent = d.faq.h2;
+  document.getElementById('faq-sub').textContent = d.faq.sub;
+  document.getElementById('faq-list').innerHTML = d.faq.items.map(f=>`
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">${f.q}<i class="ti ti-plus"></i></div>
+      <div class="faq-a">${f.a}</div>
+    </div>`).join('');
+  // cta
+  document.getElementById('cta-h2').textContent = d.cta.h2;
+  document.getElementById('cta-p').textContent = d.cta.p;
+  document.getElementById('cta-btn1').textContent = d.cta.cta1;
+  document.getElementById('cta-btn2').textContent = d.cta.cta2;
+  // footer
+  document.getElementById('footer-tag').textContent = d.footer.tagline;
+  const fcols = document.querySelectorAll('.footer-col');
+  d.footer.cols.forEach((col,i)=>{
+    fcols[i].querySelector('h4').textContent=col.h;
+    fcols[i].querySelectorAll('a').forEach((a,j)=>a.textContent=col.links[j]);
+  });
+  document.getElementById('footer-copy').textContent = d.footer.copy;
+  document.getElementById('footer-legal').textContent = d.footer.legal;
+}
+
+function renderTiers(d){
+  document.getElementById('tiers').innerHTML = d.pricing.tiers.map(t=>`
+    <div class="tier${t.pop?' pop':''}">
+      ${t.pop?`<div class="pop-ribbon">${t.ribbon}</div>`:''}
+      <div class="tbadge">${t.badge}</div>
+      <h3>${t.name}</h3>
+      <div class="tier-who">${t.who}</div>
+      <div class="price-row"><span class="price-main">${t.price}</span>${t.unit?`<span class="price-unit">${t.unit}</span>`:''}</div>
+      <div class="price-sub">${billingAnnual && t.price==='30%' ? (currentLang==='en'?'Annual billing — ~8% savings on coord. fee':t.sub.replace('69','63')) : t.sub}</div>
+      <div class="price-maint${t.maintMuted?' muted':''}"><i class="ti ti-${t.maintMuted?'tool':'shield-check'}"></i>${t.maintLabel}<span>${t.maintVal}</span></div>
+      ${t.sections.map(sec=>`
+        <div class="feat-label">${sec.label}</div>
+        <ul class="feats">${sec.items.map(li=>`<li class="${sec.hi?'hi':''}"><i class="ti ${li.icon}"></i>${li.text}</li>`).join('')}</ul>
+      `).join('')}
+      <button class="btn${t.pop?' btn-p':''} btn-lg" style="width:100%">${t.cta}</button>
+    </div>`).join('');
+}
+
+function toggleBilling(){
+  billingAnnual = !billingAnnual;
+  const dot = document.getElementById('tdot');
+  dot.style.left = billingAnnual?'25px':'3px';
+  document.getElementById('lbl-mo').classList.toggle('on',!billingAnnual);
+  document.getElementById('lbl-yr').classList.toggle('on',billingAnnual);
+  renderTiers(getLang());
+}
+
+function calc(){
+  const v=+document.getElementById('c-v').value;
+  const r=+document.getElementById('c-r').value;
+  const m=+document.getElementById('c-m').value;
+  document.getElementById('o-v').textContent=v;
+  document.getElementById('o-r').textContent='$'+r.toLocaleString();
+  document.getElementById('o-m').textContent='$'+m;
+  const gross=v*r, mgmt=Math.round(gross*0.30), coord=v*69, maintCost=v*m, net=gross-mgmt-coord-maintCost;
+  document.getElementById('r-gross').textContent='$'+gross.toLocaleString();
+  document.getElementById('r-mgmt').textContent='−$'+mgmt.toLocaleString();
+  document.getElementById('r-coord').textContent='−$'+coord.toLocaleString();
+  document.getElementById('r-net').textContent='$'+Math.max(0,net).toLocaleString();
+}
+
+function toggleFaq(el){
+  const wasOpen=el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f=>f.classList.remove('open'));
+  if(!wasOpen)el.classList.add('open');
+}
+</script>
+
+<!-- ==================== HTML STRUCTURE ==================== -->
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-mark"><i class="ti ti-tree"></i></div>
+    <div class="logo-name"><div class="l1">New Roots</div><div class="l2">Solution</div></div>
+  </div>
+  <div class="nav-links" id="nav-links"></div>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')"><span>🇺🇸</span> EN</button>
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')"><span>🇨🇳</span> 中文</button>
+      <div class="lang-divider"></div>
+      <div class="script-sub" id="script-sub" style="display:none">
+        <button class="script-btn active" id="btn-sc" onclick="setScript('sc')">简</button>
+        <button class="script-btn" id="btn-tc" onclick="setScript('tc')">繁</button>
+      </div>
+    </div>
+    <button class="btn" id="nav-signin"></button>
+    <button class="btn btn-p" id="nav-cta"></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow-pill"><i class="ti ti-map-pin"></i> <span id="hero-eyebrow"></span></div>
+    <h1 id="hero-h1"></h1>
+    <p id="hero-p"></p>
+    <div class="hero-actions">
+      <button class="btn btn-p btn-lg" id="hero-cta1"></button>
+      <button class="btn btn-outline btn-lg" id="hero-cta2"></button>
+    </div>
+    <div class="trust-row" id="hero-trust"></div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="hc-label" id="hc-label"></div>
+      <div class="hc-stat hc-featured" style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <div class="hc-icon" style="background:var(--nr-teal)"><i class="ti ti-star" style="color:#fff"></i></div>
+        <div>
+          <div style="font-size:26px;font-weight:700;color:var(--nr-teal)">4.9 ★ <span style="font-size:13px;font-weight:400;color:var(--nr-teal-mid)">Turo</span></div>
+          <div class="hc-sub" id="hc-rating-sub"></div>
+        </div>
+      </div>
+      <div class="hc-stat">
+        <div class="hc-icon"><i class="ti ti-users"></i></div>
+        <div><div class="hc-val">1:5</div><div class="hc-sub" id="hc-ratio-sub"></div></div>
+      </div>
+      <div class="hc-stat">
+        <div class="hc-icon"><i class="ti ti-clock"></i></div>
+        <div><div class="hc-val">24 hr</div><div class="hc-sub" id="hc-resp-sub"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-cell"><div class="stat-num"></div><div class="stat-sub"></div></div>
+  <div class="stat-cell"><div class="stat-num"></div><div class="stat-sub"></div></div>
+  <div class="stat-cell"><div class="stat-num"></div><div class="stat-sub"></div></div>
+  <div class="stat-cell"><div class="stat-num"></div><div class="stat-sub"></div></div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="sec-eyebrow" id="svc-eyebrow"></div>
+  <h2 id="svc-h2"></h2>
+  <p class="section-sub" id="svc-sub"></p>
+  <div class="svc-grid" id="svc-grid"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section class="section tint" id="how">
+  <div class="sec-eyebrow" id="how-eyebrow"></div>
+  <h2 id="how-h2"></h2>
+  <p class="section-sub" id="how-sub"></p>
+  <div class="steps-wrap"><div class="steps" id="how-steps"></div></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="padding-bottom:0">
+  <div class="sec-eyebrow" id="pricing-eyebrow"></div>
+  <h2 id="pricing-h2"></h2>
+  <p class="section-sub" id="pricing-sub"></p>
+</section>
+
+<div class="toggle-wrap">
+  <span class="tl on" id="lbl-mo"></span>
+  <button class="toggle-track" onclick="toggleBilling()"><div class="toggle-dot" id="tdot"></div></button>
+  <span class="tl" id="lbl-yr"></span>
+  <span class="save-pill" id="save-pill"></span>
+</div>
+
+<section class="section" style="padding-top:32px">
+  <div class="tiers" id="tiers"></div>
+  <div class="markup-band">
+    <i class="ti ti-info-circle big"></i>
+    <div><h4 id="band-h"></h4><p id="band-p"></p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MAINTENANCE -->
+<section class="section tint">
+  <div class="sec-eyebrow" id="maint-eyebrow"></div>
+  <h2 id="maint-h2"></h2>
+  <p class="section-sub" id="maint-sub"></p>
+  <div class="maint-grid" id="maint-grid"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CALCULATOR -->
+<section class="section teal-tint">
+  <div class="sec-eyebrow" id="calc-eyebrow"></div>
+  <h2 id="calc-h2"></h2>
+  <p class="section-sub" id="calc-sub"></p>
+  <div class="calc-wrap">
+    <h3 id="calc-h3"></h3>
+    <div class="calc-row"><label></label><input type="range" min="1" max="30" value="5" step="1" id="c-v" oninput="calc()"><span class="val" id="o-v">5</span></div>
+    <div class="calc-row"><label></label><input type="range" min="500" max="3000" value="1400" step="50" id="c-r" oninput="calc()"><span class="val" id="o-r">$1,400</span></div>
+    <div class="calc-row"><label></label><input type="range" min="50" max="400" value="120" step="10" id="c-m" oninput="calc()"><span class="val" id="o-m">$120</span></div>
+    <div class="calc-results">
+      <div class="cr"><div class="cr-num" id="r-gross"></div><div class="cr-label"></div></div>
+      <div class="cr neg"><div class="cr-num" id="r-mgmt"></div><div class="cr-label"></div></div>
+      <div class="cr neg"><div class="cr-num" id="r-coord"></div><div class="cr-label"></div></div>
+      <div class="cr total"><div class="cr-num" id="r-net"></div><div class="cr-label"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIALS -->
+<section class="section" id="testimonials">
+  <div class="sec-eyebrow" id="test-eyebrow"></div>
+  <h2 id="test-h2"></h2>
+  <p class="section-sub" id="test-sub"></p>
+  <div class="reviews" id="reviews"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="section tint">
+  <div class="sec-eyebrow" id="faq-eyebrow"></div>
+  <h2 id="faq-h2"></h2>
+  <p class="section-sub" id="faq-sub"></p>
+  <div id="faq-list"></div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band" id="contact">
+  <div>
+    <h2 id="cta-h2"></h2>
+    <p id="cta-p"></p>
+  </div>
+  <div class="cta-btns">
+    <button class="btn-cta" id="cta-btn1"></button>
+    <button class="btn-ghost" id="cta-btn2"></button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-mark"><i class="ti ti-tree"></i></div>
+        <div class="logo-name"><div class="l1">New Roots</div><div class="l2">Solution</div></div>
+      </div>
+      <p id="footer-tag"></p>
+    </div>
+    <div class="footer-col"><h4></h4><a href="#"></a><a href="#"></a><a href="#"></a><a href="#"></a></div>
+    <div class="footer-col"><h4></h4><a href="#"></a><a href="#"></a><a href="#"></a><a href="#"></a></div>
+    <div class="footer-col"><h4></h4><a href="#"></a><a href="#"></a><a href="#"></a></div>
+  </div>
+  <div class="footer-bottom">
+    <span id="footer-copy"></span>
+    <span id="footer-legal"></span>
+  </div>
+</footer>
+
+<script>
+  // Initial render
+  render();
+  calc();
+</script>
+</body>
+</html>
